@@ -74,7 +74,6 @@ class ChartComponent extends React.Component {
 
 		// Apply the theme
 		Highcharts.setOptions(Highcharts.theme);
-		
 
 		var seriesOptions = [],
 		    seriesCounter = 0,
