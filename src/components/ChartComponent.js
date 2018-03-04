@@ -95,8 +95,12 @@ class ChartComponent extends React.Component {
 
 		var names = this.state.stocks.length == 0 ? ["AAPL"] : this.state.stocks;
 
-
-
+		const removeStock = (name) => {
+			const stocks = this.state.stocks.filter((stock) => stock != name );
+			this.setState({ stocks: stocks }, () => {
+				alert("Stock Symbol doesn't exist, Please enter a valid Symbol");
+			});
+		};
 		/**
 		 * Create the chart when all data is loaded
 		 * @returns {undefined}
@@ -145,7 +149,10 @@ class ChartComponent extends React.Component {
 				const dataArr = [];
 
 				$.getJSON(url, function(data) {
-					// console.log(data["Time Series (Daily)"]);
+
+					if (data["Error Message"]) {
+						removeStock(name);
+					} else {
 
 					$.each(data["Time Series (Daily)"], function(idx, time) {
 						const unix = moment(idx, "YYYY-M-D").valueOf();
@@ -169,11 +176,18 @@ class ChartComponent extends React.Component {
 		    	if (seriesCounter === names.length) {
 		            createChart();
 		    	}
+
+		    	}
+
 				});
 
 		});
 
 
+	};
+	onRemoveStock = (e) => {
+		const stocks = this.state.stocks.filter((stock) => stock != e.target.value);
+		this.setState({ stocks: stocks}, () => this.onCreateChart() );
 	};
 	componentDidMount = () => {
 
@@ -182,14 +196,22 @@ class ChartComponent extends React.Component {
 		this.onCreateChart();
 
 	};
-	// componentDidUpdate = () => {
-	// 	// this.onCreateChart();
-	// };
 	render() {
 		return (
 			<div className="jumbotron">
 				<div className="offset-2">
 					<div id="container" style={{ width: '70%', height: '400px'}}></div>
+				</div>
+				<div className="col-12">
+					{
+						this.state.stocks.length != 0 ? this.state.stocks.map((stock, index) => {
+							return (
+								<div className="col-2" key={index}>
+									<h1>{stock} <span><button value={stock} onClick={this.onRemoveStock}>x</button></span></h1>
+								</div>
+							);
+						}) : (<h1>Add a Stock Symbol</h1>)
+					}
 				</div>
 				<div>
 					<form onSubmit={this.onSubmit}>

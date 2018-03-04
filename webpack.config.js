@@ -25,7 +25,10 @@ module.exports = {
   },
   plugins: [
       new webpack.DefinePlugin({
-        "process.env.STOCK_API_KEY": JSON.stringify(process.env.STOCK_API_KEY)
+        "process.env.STOCK_API_KEY": JSON.stringify(process.env.STOCK_API_KEY),
+        "process.env.PUSHER_APP_ID": JSON.stringify(process.env.PUSHER_APP_ID),
+        "process.env.PUSHER_API_KEY": JSON.stringify(process.env.PUSHER_API_KEY),
+        "process.env.PUSHER_SECRET": JSON.stringify(process.env.PUSHER_SECRET)
       })
     ],
   devtool: "cheap-module-eval-source-map",
