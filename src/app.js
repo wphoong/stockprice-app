@@ -1,24 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
-// import Pusher from "pusher";
 import "normalize.css/normalize.css";
 import "./styles/styles.scss";
 import ChartComponent from "./components/ChartComponent.js";
 
 console.log("App.js is running");
-
-// Enable pusher logging - don't include this in production
-Pusher.logToConsole = true;
-
-var pusher = new Pusher(process.env.PUSHER_API_KEY, {
-  cluster: 'us2',
-  encrypted: true
-});
-
-var channel = pusher.subscribe('my-channel');
-channel.bind('my-event', function(data) {
-  alert(data.message);
-});
 
 const jsx = (
 	<div>

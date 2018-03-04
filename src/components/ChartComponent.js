@@ -8,9 +8,12 @@ class ChartComponent extends React.Component {
 	};
 	onTextChange = (e) => {
 		const text = e.target.value;
-
-		this.setState((prevState) => ({ stock: text.toUpperCase() }));
-		console.log(this.state.stock);
+		channel.bind('my-event', function(data) {
+		  this.setState((prevState) => ({ stock: text.toUpperCase() }));
+			console.log(this.state.stock);
+		});
+		// this.setState((prevState) => ({ stock: text.toUpperCase() }));
+		// console.log(this.state.stock);
 	};
 	onSubmit = (e) => {
 		e.preventDefault();
@@ -192,6 +195,12 @@ class ChartComponent extends React.Component {
 	componentDidMount = () => {
 
 		console.log('mounted');
+		var pusher = new Pusher(process.env.PUSHER_API_KEY, {
+		  cluster: 'us2',
+		  encrypted: true
+		});
+
+		var channel = pusher.subscribe('my-channel');
 
 		this.onCreateChart();
 
