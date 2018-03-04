@@ -7,18 +7,6 @@ import ChartComponent from "./components/ChartComponent.js";
 
 console.log("App.js is running");
 
-// var pusher = new Pusher({
-//   appId: process.env.PUSHER_APP_ID,
-//   key: process.env.PUSHER_API_KEY,
-//   secret: process.env.PUSHER_SECRET,
-//   cluster: 'us2',
-//   encrypted: true
-// });
-
-// pusher.trigger('my-channel', 'my-event', {
-//   "message": "hello world"
-// });
-
 // Enable pusher logging - don't include this in production
 Pusher.logToConsole = true;
 
