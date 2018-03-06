@@ -1,20 +1,27 @@
-const path = require("path");
-const publicPath = path.join(__dirname, "..", "public");
-const bodyParser = require('body-parser');
+"use strict";
+
 const express = require("express");
+const path = require("path");
+const bodyParser = require('body-parser');
 const mongoose = require("mongoose");
 const Stock = require("../src/models/stock.js");
 const routes = require("../src/routes/index.js");
-var methodOverride = require('method-override');
-const app = express();
+const methodOverride = require('method-override');
 
-app.use(express.static(publicPath));
+const app = express();
+require("dotenv").load();
+
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true}));
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'public')));
+app.set("views", 'public');
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
+app.use(methodOverride('_method'));
 
 mongoose.Promise = global.Promise;
-const url = process.env.MONGOLAB_URI;
+const url = process.env.MONGO_URI;
+// const url = process.env.MONGOLAB_URI;
 
 mongoose.connect(url, (err) => {
   if (err) {
@@ -24,43 +31,14 @@ mongoose.connect(url, (err) => {
   }
 });
 
-routes(app);
+app.get("*", (req, res) => {
+  res.sendFile(path.join(publicPath, "index.html"));
+});
 
 
 // LISTEN SERVER
-const port = process.env.PORT || 8080;
+const port = 8080;
 
 app.listen(port, () => {
   console.log("Listening on port 8080");
 });
-
-// const path = require("path");
-// const publicPath = path.join(__dirname, "..", "public");
-// const express = require("express");
-// const Stock = require("../src/models/stock.js");
-// const mongoose = require("mongoose");
-// const routes = require("../src/routes/index.js");
-// const app = express();
-
-
-// app.use(express.static(publicPath));
-
-
-// mongoose.Promise = global.Promise;
-// mongoose.connect(process.env.MONGO_URI, (err) => {
-//   if (err) {
-//     console.log('Error when connecting:', err);
-//   } else {
-//     console.log('Server connected to the database.');
-//   }
-// });
-
-// routes(app);
-
-// // LISTEN SERVER
-// const port = process.env.PORT || 3000;
-
-// app.listen(port, () => {
-//   console.log("Listening on port 3000");
-// });
-

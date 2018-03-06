@@ -31,6 +31,9 @@ module.exports = {
         "process.env.PUSHER_SECRET": JSON.stringify(process.env.PUSHER_SECRET),
         "process.env.MONGO_URI": JSON.stringify(process.env.MONGO_URI),
         "process.env.MONGOLAB_URI": JSON.stringify(process.env.MONGOLAB_URI)
+      }),
+      new webpack.DefinePlugin({
+        "typeof window": "\"object\""
       })
     ],
   devtool: "cheap-module-eval-source-map",
