@@ -1,14 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Router, Route, Switch } from "react-router-dom";
+import { Provider } from "react-redux";
+import configureStore from "./store/configureStore.js";
 import createHistory from "history/createBrowserHistory";
 import ChartComponent from "./components/ChartComponent.js";
 import StocksComponent from "./components/StocksComponent.js";
 import "normalize.css/normalize.css";
 import "./styles/styles.scss";
 
+const store = configureStore();
 const history = createHistory();
-
 
 console.log("App.js is running");
 
@@ -24,9 +26,9 @@ const AppRouter = () => (
 );
 
 const jsx = (
-	<div>
+	<Provider store={store}>
 		<AppRouter />
-	</div>
+	</Provider>
 );
 
 //for BABEL in command line

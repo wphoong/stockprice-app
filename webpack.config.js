@@ -29,8 +29,12 @@ module.exports = {
         "process.env.PUSHER_APP_ID": JSON.stringify(process.env.PUSHER_APP_ID),
         "process.env.PUSHER_API_KEY": JSON.stringify(process.env.PUSHER_API_KEY),
         "process.env.PUSHER_SECRET": JSON.stringify(process.env.PUSHER_SECRET),
-        "process.env.MONGO_URI": JSON.stringify(process.env.MONGO_URI),
-        "process.env.MONGOLAB_URI": JSON.stringify(process.env.MONGOLAB_URI)
+        "process.env.FIREBASE_API_KEY": JSON.stringify(process.env.FIREBASE_API_KEY),
+        "process.env.FIREBASE_AUTH_DOMAIN": JSON.stringify(process.env.FIREBASE_AUTH_DOMAIN),
+        "process.env.FIREBASE_DATABASE_URL": JSON.stringify(process.env.FIREBASE_DATABASE_URL),
+        "process.env.FIREBASE_PROJECT_ID": JSON.stringify(process.env.FIREBASE_PROJECT_ID),
+        "process.env.FIREBASE_STORAGE_BUCKET": JSON.stringify(process.env.FIREBASE_STORAGE_BUCKET),
+        "process.env.FIREBASE_MESSAGING_SENDER_ID": JSON.stringify(process.env.FIREBASE_MESSAGING_SENDER_ID)
       }),
       new webpack.DefinePlugin({
         "typeof window": "\"object\""

@@ -1,10 +1,12 @@
 import React from 'react';
 import moment from 'moment';
+import { connect } from 'react-redux';
+import { startAddStock } from "../actions/stock.js";
 
 class ChartComponent extends React.Component {
 	state = {
 		stock: "",
-		stocks: ["MSFT", "KO"]
+		stocks: ""
 	};
 	onTextChange = (e) => {
 		const text = e.target.value;
@@ -195,12 +197,14 @@ class ChartComponent extends React.Component {
 	componentDidMount = () => {
 
 		console.log('mounted');
-		var pusher = new Pusher(process.env.PUSHER_API_KEY, {
-		  cluster: 'us2',
-		  encrypted: true
-		});
+		// var pusher = new Pusher(process.env.PUSHER_API_KEY, {
+		//   cluster: 'us2',
+		//   encrypted: true
+		// });
 
-		var channel = pusher.subscribe('my-channel');
+		// var channel = pusher.subscribe('my-channel');
+		
+
 
 		this.onCreateChart();
 
@@ -239,4 +243,8 @@ class ChartComponent extends React.Component {
 	}
 };
 
-export default ChartComponent;
+const mapDispatchToProps = (dispatch) => ({
+	startAddStock: (stock) => dispatch(startAddStock(stock))
+});
+
+export default connect(undefined, mapDispatchToProps)(ChartComponent);

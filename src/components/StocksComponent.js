@@ -1,9 +1,20 @@
 import React from 'react';
+import axios from 'axios';
 
-const StocksComponent = () => (
-	<div>
-		<p>LULKRAPPA123</p>
-	</div>
-);
-
+class StocksComponent extends React.Component {
+	state = {
+		stocks: ""
+	};
+	componentDidMount = () => {
+	
+		
+	};
+	render() {
+		return (
+			<div>
+				<p>LULKRAPPA123</p>
+			</div>
+		);
+	}
+} 
 export default StocksComponent;
