@@ -34,6 +34,8 @@
     "node-sass": "^4.5.3",
     "nodemon": "^1.17.1",
     "normalize.css": "^7.0.0",
+    "pusher": "^1.5.1",
+    "pusher-redux": "^0.3.8",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-modal": "^2.3.3",

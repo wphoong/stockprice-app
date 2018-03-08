@@ -14,8 +14,20 @@ class ChartComponent extends React.Component {
 		this.setState((prevState) => ({ stock: text.toUpperCase() }));
 	};
 	onSubmit = (e) => {
+
+		var pusher = new Pusher(process.env.PUSHER_API_KEY, {
+		  cluster: 'us2',
+		  encrypted: true
+		});
+		var channel = pusher.subscribe('my-channel');
+		const callback = () => {
+			console.log(this.state.stock + "added");
+		};
+		channel.bind('add-stock', callback);
 		this.props.startAddStock(this.state.stock);
+
 		this.setState({stock: "" });
+		
 	};
 	onCreateChart = () => {
 		// this.props.startSetStocks().then(() => {
@@ -181,8 +193,6 @@ class ChartComponent extends React.Component {
 
 					dataArr.sort(function(a, b) {return a[0] - b[0]; });
 
-					console.log(dataArr);
-
 					seriesOptions[i] = {
 		        	name: name,
 		        	data: dataArr
@@ -210,19 +220,7 @@ class ChartComponent extends React.Component {
 	};
 	componentDidMount = () => {
 		console.log("CURRENT STATE ",this.props.stocks);
-		// var pusher = new Pusher(process.env.PUSHER_API_KEY, {
-		//   cluster: 'us2',
-		//   encrypted: true
-		// });
-
-		// var channel = pusher.subscribe('my-channel');
-		// this.props.startAddStock("KO");
-		// this.props.startAddStock("MSFT");
-
-		// this.props.startRemoveStock({id: "-L6y1uyFw2_Y0U0Z4aSo"});
 		this.onCreateChart();
-
-		
 	};
 	render() {
 		return (

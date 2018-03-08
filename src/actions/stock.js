@@ -13,6 +13,7 @@ export const startAddStock = (stock = {}) => {
 				id: ref.key,
 				stock: newStock
 			}));
+			
 		});
 	};
 };
