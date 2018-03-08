@@ -6,6 +6,7 @@ import configureStore from "./store/configureStore.js";
 import createHistory from "history/createBrowserHistory";
 import ChartComponent from "./components/ChartComponent.js";
 import StocksComponent from "./components/StocksComponent.js";
+import { startSetStocks } from "./actions/stock.js";
 import "normalize.css/normalize.css";
 import "./styles/styles.scss";
 
@@ -33,6 +34,18 @@ const jsx = (
 
 //for BABEL in command line
 // babel src/app.js --out-file=public/scripts/app.js --presets=env,react --watch
+const renderApp = () => {
+	ReactDOM.render(jsx, document.getElementById('app'));
+};
 
-ReactDOM.render(jsx, document.getElementById('app'));
+// renderApp();
+
+store.dispatch(startSetStocks()).then(() => {
+	renderApp();
+});
+
+store.subscribe(() => {
+  const state = store.getState();
+  console.log(state);
+});
 

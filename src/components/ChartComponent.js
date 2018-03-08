@@ -1,31 +1,28 @@
 import React from 'react';
 import moment from 'moment';
 import { connect } from 'react-redux';
-import { startAddStock } from "../actions/stock.js";
+import { startAddStock, startSetStocks, startRemoveStock } from "../actions/stock.js";
 
 class ChartComponent extends React.Component {
 	state = {
 		stock: "",
-		stocks: ""
+		stocks: this.props.stocks ? this.props.stocks : this.props.startAddStock("AAPL")
 	};
 	onTextChange = (e) => {
 		const text = e.target.value;
-		channel.bind('my-event', function(data) {
-		  this.setState((prevState) => ({ stock: text.toUpperCase() }));
-			console.log(this.state.stock);
-		});
-		// this.setState((prevState) => ({ stock: text.toUpperCase() }));
-		// console.log(this.state.stock);
+
+		this.setState((prevState) => ({ stock: text.toUpperCase() }));
 	};
 	onSubmit = (e) => {
-		e.preventDefault();
-		const stocks = [...this.state.stocks, this.state.stock];
-		console.log("new stock arr ", stocks);
-
-		this.setState({ stocks: stocks }, () => { this.onCreateChart(); });
+		this.props.startAddStock(this.state.stock);
+		this.setState({stock: "" });
 	};
 	onCreateChart = () => {
-
+		// this.props.startSetStocks().then(() => {
+		// 	console.log("state after adding ", this.state.stocks);
+		// 	console.log("props state after adding ", this.props.stocks);
+		// });
+		
 		Highcharts.createElement('link', {
 		   href: 'https://fonts.googleapis.com/css?family=Dosis:400,600',
 		   rel: 'stylesheet',
@@ -95,17 +92,23 @@ class ChartComponent extends React.Component {
 		// Apply the theme
 		Highcharts.setOptions(Highcharts.theme);
 
+		// Data for Chart Creation
+
 		var seriesOptions = [],
 		    seriesCounter = 0;
 
-		var names = this.state.stocks.length == 0 ? ["AAPL"] : this.state.stocks;
+		var names = [];
 
-		const removeStock = (name) => {
-			const stocks = this.state.stocks.filter((stock) => stock != name );
-			this.setState({ stocks: stocks }, () => {
-				alert("Stock Symbol doesn't exist, Please enter a valid Symbol");
-			});
-		};
+		this.state.stocks.forEach((stock) => {
+			names.push(stock.stock);
+		});
+
+		// const removeStock = (name) => {
+		// 	const stocks = this.state.stocks.filter((stock) => stock != name );
+		// 	this.setState({ stocks: stocks }, () => {
+		// 		alert("Stock Symbol doesn't exist, Please enter a valid Symbol");
+		// 	});
+		// };
 		/**
 		 * Create the chart when all data is loaded
 		 * @returns {undefined}
@@ -148,6 +151,13 @@ class ChartComponent extends React.Component {
 		    });
 		}
 
+		let currentState = this.state.stocks;
+		const removeStock = ({id}) => {
+			alert("Stock Symbol doesn't exist, Please enter a valid Symbol");
+			this.props.startRemoveStock({id: id});
+			window.location.reload();
+		};
+
 		$.each(names, function (i, name) {
 				const url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&outputsize=full&symbol=" + name + "&apikey="+process.env.STOCK_API_KEY;
 
@@ -156,7 +166,11 @@ class ChartComponent extends React.Component {
 				$.getJSON(url, function(data) {
 
 					if (data["Error Message"]) {
-						removeStock(name);
+						currentState.forEach((stock) => {
+							if (stock.stock == name) {
+								removeStock({id: stock.id});
+							}
+						});
 					} else {
 
 					$.each(data["Time Series (Daily)"], function(idx, time) {
@@ -191,23 +205,24 @@ class ChartComponent extends React.Component {
 
 	};
 	onRemoveStock = (e) => {
-		const stocks = this.state.stocks.filter((stock) => stock != e.target.value);
-		this.setState({ stocks: stocks}, () => this.onCreateChart() );
+		this.props.startRemoveStock({id: e.target.id});
+		window.location.reload();
 	};
 	componentDidMount = () => {
-
-		console.log('mounted');
+		console.log("CURRENT STATE ",this.props.stocks);
 		// var pusher = new Pusher(process.env.PUSHER_API_KEY, {
 		//   cluster: 'us2',
 		//   encrypted: true
 		// });
 
 		// var channel = pusher.subscribe('my-channel');
-		
+		// this.props.startAddStock("KO");
+		// this.props.startAddStock("MSFT");
 
-
+		// this.props.startRemoveStock({id: "-L6y1uyFw2_Y0U0Z4aSo"});
 		this.onCreateChart();
 
+		
 	};
 	render() {
 		return (
@@ -217,10 +232,10 @@ class ChartComponent extends React.Component {
 				</div>
 				<div className="col-12">
 					{
-						this.state.stocks.length != 0 ? this.state.stocks.map((stock, index) => {
+						this.state.stocks.length != 0 ? this.state.stocks.map(({id, stock}) => {
 							return (
-								<div className="col-2" key={index}>
-									<h1>{stock} <span><button value={stock} onClick={this.onRemoveStock}>x</button></span></h1>
+								<div className="col-2" key={id}>
+									<h1>{stock} <span><button value={stock} id={id} onClick={this.onRemoveStock}>x</button></span></h1>
 								</div>
 							);
 						}) : (<h1>Add a Stock Symbol</h1>)
@@ -232,6 +247,7 @@ class ChartComponent extends React.Component {
 							type="text"
 							placeholder="Stock Code"
 							onChange={this.onTextChange}
+							value={this.state.stock}
 						/>
 						<input 
 							type="submit"
@@ -243,8 +259,14 @@ class ChartComponent extends React.Component {
 	}
 };
 
-const mapDispatchToProps = (dispatch) => ({
-	startAddStock: (stock) => dispatch(startAddStock(stock))
+const mapStateToProps = (state) => ({
+	stocks: state.stocks
 });
 
-export default connect(undefined, mapDispatchToProps)(ChartComponent);
+const mapDispatchToProps = (dispatch) => ({
+	startAddStock: (stock) => dispatch(startAddStock(stock)),
+	startSetStocks: () => dispatch(startSetStocks()),
+	startRemoveStock: ({id}) => dispatch(startRemoveStock({id}))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChartComponent);
