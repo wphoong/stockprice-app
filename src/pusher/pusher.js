@@ -11,8 +11,6 @@ const pusherConfig = () => {
 	    log('>>> detected limit error');
 	  }
 	});
-
-	
 };
 
 export default pusherConfig;

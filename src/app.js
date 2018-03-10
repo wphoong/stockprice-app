@@ -8,11 +8,12 @@ import createHistory from "history/createBrowserHistory";
 import ChartComponent from "./components/ChartComponent.js";
 import StocksComponent from "./components/StocksComponent.js";
 import { startSetStocks } from "./actions/stock.js";
+import CreateChartComponent from "./components/CreateChartComponent.js";
 import "normalize.css/normalize.css";
 import "./styles/styles.scss";
 
 // config for pusher
-pusherConfig();
+// pusherConfig();
 
 // configure store
 const store = configureStore();
