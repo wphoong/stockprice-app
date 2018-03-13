@@ -1,4 +1,5 @@
 import database from "../firebase/firebase.js";
+import { setPusherClient } from 'react-pusher';
 
 export const addStock = (stock) => ({
 	type: "ADD_STOCK",
@@ -13,7 +14,6 @@ export const startAddStock = (stock = {}) => {
 				id: ref.key,
 				stock: newStock
 			}));
-			
 		});
 	};
 };

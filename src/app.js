@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Router, Route, Switch } from "react-router-dom";
 import { Provider } from "react-redux";
-import pusherConfig from "./pusher/pusher.js";
 import configureStore from "./store/configureStore.js";
 import createHistory from "history/createBrowserHistory";
 import ChartComponent from "./components/ChartComponent.js";
@@ -11,9 +10,6 @@ import { startSetStocks } from "./actions/stock.js";
 import CreateChartComponent from "./components/CreateChartComponent.js";
 import "normalize.css/normalize.css";
 import "./styles/styles.scss";
-
-// config for pusher
-// pusherConfig();
 
 // configure store
 const store = configureStore();
