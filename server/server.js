@@ -17,21 +17,9 @@ app.use(express.static(publicPath));
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 
-app.get("/", (req, res) => {
+app.get("*", (req, res) => {
   res.sendFile(path.join(publicPath, "index.html"));
 });
-
-app.get("/api/send", (req, res) => {
-	res.send('hi');
-});
-
-app.post("/api/send", (req,res) => {
-	pusher.trigger('post-actions', 'messages', {
-	  "message": "hello world"
-	});
-	console.log("created: true");
-});
-
 
 // LISTEN SERVER
 const port = 3000;
