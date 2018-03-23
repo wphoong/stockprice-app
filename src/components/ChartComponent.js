@@ -4,7 +4,9 @@ import { connect } from 'react-redux';
 import { startAddStock, startSetStocks } from "../actions/stock.js";
 import CreateChartComponent from "./CreateChartComponent.js";
 import StockListComponent from "./StockListComponent.js";
-import axios from 'axios';
+import openSocket from 'socket.io-client';
+// import { stockUpdate, stockListen } from "../socket/socket.js";
+
 
 class ChartComponent extends React.Component {
 	constructor(props) {
@@ -14,6 +16,9 @@ class ChartComponent extends React.Component {
 			stock: "",
 			stocks: this.props.stocks ? this.props.stocks : this.props.startAddStock("AAPL")
 		};
+
+		this.socket = openSocket('http://localhost:3000');
+
 	};
 	onTextChange = (e) => {
 		const text = e.target.value.replace(/\s/g, "");
@@ -30,12 +35,22 @@ class ChartComponent extends React.Component {
 		if (!names.includes(this.state.stock)) {
 			this.props.startAddStock(this.state.stock);		
 
+			// stockUpdate(this.state.stock);
+			this.socket.emit('updating', this.state.stock);
+
 			this.setState({stock: "" });
 
 		} else {
 			alert(this.state.stock + ' is already added');
 		}
 
+	};
+	componentDidMount = () => {
+		// stockListen();
+		this.socket.on('updated', (data) => {
+			console.log(data);
+			this.props.startSetStocks();
+		});
 	};
 	render() {
 		return (
@@ -70,7 +85,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
 	startSetStocks: () => dispatch(startSetStocks()),
-	startAddStock: (stock) => dispatch(startAddStock(stock))
+	startAddStock: (stock) => dispatch(startAddStock(stock)),
+	startSetStocks: () => dispatch(startSetStocks())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChartComponent);

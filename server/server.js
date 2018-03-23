@@ -7,9 +7,9 @@ const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const cors = require('cors');
 
-
-const app = express();
-
+const app = require('express')();
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
 
 app.use(cors());
 app.use(express.static(publicPath));
@@ -36,6 +36,21 @@ app.post("/api/send", (req,res) => {
 // LISTEN SERVER
 const port = 3000;
 
-app.listen(port, () => {
+io.on('connection', (socket) => {
+	console.log("connected to stock price app");
+
+	socket.on('updating', (data) => {
+		console.log(data);
+
+		io.emit('updated', data);
+
+	});
+});
+
+// app.listen(port, () => {
+//   console.log("Listening on port 3000");
+// });
+
+server.listen(port, () => {
   console.log("Listening on port 3000");
 });
