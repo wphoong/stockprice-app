@@ -1,12 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { startRemoveStock } from '../actions/stock.js';
+import openSocket from 'socket.io-client';
 
 const StockListComponent = (props) => {
 	const onRemove = (e) => {
 		const id = e.target.id;
 		console.log(id);
 		props.startRemoveStock({id: id});
+		props.socket.emit('updating', 'removed stock');
 	};
 	return (
 		<div>

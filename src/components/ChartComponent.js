@@ -59,7 +59,7 @@ class ChartComponent extends React.Component {
 					<CreateChartComponent />
 				</div>
 				<div className="col-12">
-					<StockListComponent />
+					<StockListComponent socket={this.socket} />
 				</div>
 				<div>
 					<form onSubmit={this.onSubmit}>

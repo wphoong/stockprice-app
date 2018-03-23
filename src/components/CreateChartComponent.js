@@ -4,6 +4,9 @@ import moment from 'moment';
 import { startRemoveStock } from '../actions/stock.js';
 
 class	CreateChartComponent extends React.Component {
+	constructor(props) {
+		super(props);
+	}
 	chartTheme = () => {
 		//Chart Theme
 		Highcharts.createElement('link', {
@@ -146,6 +149,7 @@ class	CreateChartComponent extends React.Component {
 			const currentStock = this.props.stocks.find((stock) => stock.stock == name);
 			console.log("ID", currentStock.id);
 			this.props.startRemoveStock({id: currentStock.id});
+			this.socket.emit('updating', 'removed stock');
 		};
 
 		$.each(names, function (i, name) {
