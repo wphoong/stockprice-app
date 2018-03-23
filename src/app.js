@@ -18,19 +18,25 @@ const history = createHistory();
 
 console.log("App.js is running");
 
-const AppRouter = () => (
-	<Router history={history}>
-		<div>
-			<Switch>
-				<Route path="/" component={ChartComponent} exact={true} />
-			</Switch>
-		</div>
-	</Router>
-);
+// const AppRouter = () => (
+// 	<Router history={history}>
+// 		<div>
+// 			<Switch>
+// 				<Route path="/" component={ChartComponent} exact={true} />
+// 			</Switch>
+// 		</div>
+// 	</Router>
+// );
+
+// const jsx = (
+// 	<Provider store={store}>
+// 		<AppRouter />
+// 	</Provider>
+// );
 
 const jsx = (
 	<Provider store={store}>
-		<AppRouter />
+		<ChartComponent />
 	</Provider>
 );
 
