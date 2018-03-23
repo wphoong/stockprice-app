@@ -17,7 +17,7 @@ class ChartComponent extends React.Component {
 			stocks: this.props.stocks ? this.props.stocks : this.props.startAddStock("AAPL")
 		};
 
-		this.socket = openSocket('http://localhost:3000');
+		this.socket = openSocket('https://stockprice-app-wp.herokuapp.com/');
 
 	};
 	onTextChange = (e) => {
